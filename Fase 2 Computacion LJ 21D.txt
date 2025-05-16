@@ -1,0 +1,80 @@
+CREATE DATABASE vertel12;
+USE vertel12;
+
+CREATE TABLE Proveedores (
+    id_proveedor INT PRIMARY KEY,
+    id_compra INT,
+    nombre VARCHAR(100),
+    direccion VARCHAR(150),
+    telefono VARCHAR(20),
+    correo VARCHAR(100),
+    id_pago INT,
+    FOREIGN KEY (id_pago) REFERENCES PagosProveedores(id_pago),
+    FOREIGN KEY (id_compra) REFERENCES Compras(id_compra)
+);
+
+CREATE TABLE Articulos (
+    id_articulo INT PRIMARY KEY,
+    descripcion VARCHAR(200),
+    precio DECIMAL(10,2),
+    stock INT,
+    id_proveedor INT,
+    FOREIGN KEY (id_proveedor) REFERENCES Proveedores(id_proveedor)
+);
+
+CREATE TABLE Compras (
+    id_compra INT PRIMARY KEY,
+    
+    fecha DATE,
+    total DECIMAL(10,2),
+    metodo_pago VARCHAR(50)
+   
+);
+
+CREATE TABLE PagosProveedores (
+    id_pago INT PRIMARY KEY,
+    id_venta INT,
+    monto DECIMAL(10,2),
+    fecha_maxima_pago DATE,
+    FOREIGN KEY (id_venta) REFERENCES Ventas(id_venta)
+);
+
+CREATE TABLE Clientes (
+    id_cliente INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    direccion VARCHAR(150),
+    telefono VARCHAR(20),
+    correo VARCHAR(100),
+    categoria VARCHAR(50) 
+);
+DROP TABLE Ventas;
+CREATE TABLE Ventas (
+    id_venta INT PRIMARY KEY,
+    id_cliente INT,
+    id_empleado INT,
+    fecha DATE,
+    metodo_pago VARCHAR(50),
+    total DECIMAL(10,2),
+    FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente),
+	FOREIGN KEY (id_empleado) REFERENCES Empleados(id_empleado)
+);
+
+CREATE TABLE DetalleVenta (
+    id_detalle INT PRIMARY KEY,
+    id_venta INT,
+    id_compra INT,
+    cantidad INT,
+    precio_unitario DECIMAL(10,2),
+    FOREIGN KEY (id_venta) REFERENCES Ventas(id_venta),
+    FOREIGN KEY (id_compra) REFERENCES Compras(id_compra)
+);
+
+CREATE TABLE Empleados (
+    id_empleado INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    puesto VARCHAR(100),
+    salario DECIMAL(10,2),
+    telefono VARCHAR(20),
+    correo VARCHAR(100)
+   
+);
